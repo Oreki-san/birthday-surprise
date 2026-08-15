@@ -1,0 +1,6 @@
+Drop your photo in this folder and name it exactly:
+
+    your-photo.jpg
+
+(index.html already points to assets/your-photo.jpg — no code
+changes needed once the file is here.)
