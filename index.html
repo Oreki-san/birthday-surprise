@@ -9,27 +9,21 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Caveat:wght@500;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 
-  /* ============================================================
-     CUSTOMIZE HERE — everything you'd want to change lives up top
-     ============================================================ */
   :root{
-    --code-length: 3; /* how many digits the secret code has */
+    --code-length: 3;
   }
 
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
-  /* Frieren-themed palette: starlit navy sky, mage teal, Fern lilac.
-     Variable NAMES are kept the same as the original template on purpose —
-     only the values changed — so nothing else in the file had to move. */
   :root{
-    --wine: #16243a;        /* was deep wine -> now night-indigo card colour */
-    --wine-deep: #050a14;   /* was deepest wine -> now near-black night sky */
-    --gold: #6fd8c7;        /* was gold -> now Frieren's mage-teal */
-    --gold-soft: #bdf0e4;   /* was soft gold -> now pale teal glow */
-    --paper: #eef3f8;       /* letter/mixtape paper, cool moonlight white */
+    --wine: #16243a;
+    --wine-deep: #050a14;
+    --gold: #6fd8c7;
+    --gold-soft: #bdf0e4;
+    --paper: #eef3f8;
     --paper-2: #e2eaf1;
-    --ink: #1c2536;         /* ink on paper */
-    --blush: #a99bd9;       /* was blush pink -> now Fern's lilac */
+    --ink: #1c2536;
+    --blush: #a99bd9;
   }
 
   html,body{
@@ -40,21 +34,18 @@
     overflow-x:hidden;
   }
 
-  /* ---------- looping night-sky video background ---------- */
   .bg-video-wrap{
     position:fixed;
     inset:0;
     width:100vw;
     height:100vh;
-    height:100dvh; /* correct viewport height on mobile browser chrome */
+    height:100dvh;
     overflow:hidden;
     z-index:-2;
     background:
       radial-gradient(ellipse at 50% 15%, rgba(111,216,199,0.10), transparent 60%),
       linear-gradient(180deg, #060d18, #0b1526 45%, #050a14 100%);
-    /* isolate this layer so the video's continuous repainting never
-       forces the browser to recheck layout/paint for the rest of the
-       page — this is the single biggest fix for background-video jank */
+
     contain: strict;
     transform: translateZ(0);
   }
@@ -65,12 +56,11 @@
     width:auto; height:auto;
     transform:translate(-50%,-50%) translateZ(0);
     object-fit:cover;
-    /* promote to its own GPU compositor layer instead of being
-       repainted together with the UI on top of it */
+
     will-change: transform;
     backface-visibility: hidden;
   }
-  /* Readability veil over the video so the card content never fights the sky */
+
   .bg-overlay{
     position:fixed; inset:0; z-index:-1;
     background:
@@ -79,9 +69,6 @@
     pointer-events:none;
   }
 
-  /* Respect Data Saver / reduced-motion / low-end devices: skip the
-     video entirely and keep just the CSS night-sky gradient. Added by
-     JS as a class on <html> — see the script at the bottom. */
   html.no-bg-video .bg-video{ display:none; }
 
   body{
@@ -132,14 +119,13 @@
     line-height:1.08;
   }
 
-  /* ---------- Screen 1: keypad lock ---------- */
   #screen-lock .lockbox{
-    background: linear-gradient(155deg, var(--wine), #0a1526);
-    border: 1px solid rgba(111,216,199,0.35);
+    background: rgba(11,21,38,0.22);
+    border: 1px solid rgba(111,216,199,0.45);
     border-radius: 18px;
     padding: 36px 28px 30px;
     width: 100%;
-    box-shadow: 0 30px 60px -20px rgba(0,0,0,.6);
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,.45);
   }
   .ribbon-corner{
     position:absolute;
@@ -149,11 +135,11 @@
     clip-path: polygon(0 0, 100% 0, 0 100%);
     opacity:.9;
   }
-  /* small character/icon art used throughout instead of emoji */
+
   .charm-icon{
     position:absolute;
-    top:-30px; right:-10px;
-    width:64px; height:64px;
+    top:-38px; right:-14px;
+    width:84px; height:84px;
     object-fit:contain;
     filter: drop-shadow(0 8px 14px rgba(0,0,0,.5));
     pointer-events:none;
@@ -162,9 +148,10 @@
     display:flex; align-items:center; justify-content:center; gap:10px;
     margin-bottom: 4px;
   }
-  .header-row img{ width:34px; height:34px; object-fit:contain; }
-  #screen-lock h1{ font-size: 1.7rem; color: var(--paper); margin-bottom: 4px;}
-  .sub{ font-size:.85rem; color: rgba(238,243,248,.65); margin-bottom: 26px; font-weight:300;}
+  .header-row img{ width:44px; height:44px; object-fit:contain; }
+  #screen-lock .eyebrow{ font-weight:700; text-shadow: 0 2px 8px rgba(0,0,0,.65); }
+  #screen-lock h1{ font-size: 1.7rem; font-weight:800; color: var(--paper); margin-bottom: 4px; text-shadow: 0 2px 10px rgba(0,0,0,.65); }
+  .sub{ font-size:.85rem; color: rgba(238,243,248,.85); margin-bottom: 26px; font-weight:600; text-shadow: 0 2px 8px rgba(0,0,0,.6); }
 
   .code-dots{
     display:flex; gap:14px; justify-content:center; margin-bottom: 26px;
@@ -174,9 +161,10 @@
     border: 1.5px solid var(--gold);
     border-radius: 8px;
     display:flex; align-items:center; justify-content:center;
-    font-family:'Fraunces', serif; font-size:1.4rem;
-    background: rgba(238,243,248,0.04);
+    font-family:'Fraunces', serif; font-size:1.4rem; font-weight:800;
+    background: rgba(11,21,38,0.18);
     color: var(--gold-soft);
+    text-shadow: 0 2px 8px rgba(0,0,0,.6);
     transition: transform .15s ease, border-color .15s ease;
   }
   .dot.filled{ border-color: var(--gold-soft); transform: translateY(-2px); }
@@ -197,16 +185,18 @@
     aspect-ratio: 1/0.85;
     border:none;
     border-radius: 10px;
-    background: rgba(238,243,248,0.06);
-    border: 1px solid rgba(111,216,199,0.3);
+    background: rgba(238,243,248,0.10);
+    border: 1px solid rgba(111,216,199,0.4);
     color: var(--paper);
     font-family:'Fraunces', serif;
     font-size: 1.15rem;
+    font-weight:800;
+    text-shadow: 0 2px 8px rgba(0,0,0,.6);
     cursor:pointer;
     display:flex; align-items:center; justify-content:center;
     transition: background .15s ease, transform .1s ease;
   }
-  .key:hover{ background: rgba(111,216,199,0.18); }
+  .key:hover{ background: rgba(111,216,199,0.22); }
   .key:active{ transform: scale(.94); }
   .key.tag::before{
     content:'';
@@ -219,17 +209,18 @@
     display:flex; gap:10px;
   }
   .keyrow-actions button{
-    flex:1; padding: 11px; border-radius: 10px; border:1px solid rgba(111,216,199,0.3);
-    background:transparent; color: var(--gold-soft); font-family:'Jost'; font-size:.85rem;
+    flex:1; padding: 11px; border-radius: 10px; border:1px solid rgba(111,216,199,0.4);
+    background: rgba(238,243,248,0.08);
+    color: var(--gold-soft); font-family:'Jost'; font-size:.85rem; font-weight:700;
+    text-shadow: 0 2px 8px rgba(0,0,0,.5);
     cursor:pointer; letter-spacing:.4px;
   }
-  .keyrow-actions button:hover{ background: rgba(111,216,199,0.1); }
+  .keyrow-actions button:hover{ background: rgba(111,216,199,0.15); }
 
-  /* ---------- Screen 2: ask ---------- */
   #screen-ask .display{ font-size: 1.9rem; color: var(--paper); margin-bottom: 22px; padding: 0 10px;}
   .critter{
-    width: 128px;
-    height: 128px;
+    width: 166px;
+    height: 166px;
     object-fit: contain;
     margin-bottom: 22px;
     filter: drop-shadow(0 14px 22px rgba(0,0,0,.5));
@@ -262,7 +253,6 @@
   .choice.no{ background: transparent; color: var(--gold-soft); left: 16%; transform: translate(0,-50%); transition: left .22s ease, top .22s ease; }
   .choice.no:hover{ background: rgba(111,216,199,0.1); }
 
-  /* ---------- Screen: the gift box hub ---------- */
   #screen-box .box{
     width: 100%;
     background: linear-gradient(160deg, #2a4160, #172c47);
@@ -288,13 +278,12 @@
     cursor:pointer;
     transition: transform .15s ease, background .15s ease;
   }
-  .box-item img{ width: 44px; height: 44px; object-fit: contain; }
+  .box-item img{ width: 57px; height: 57px; object-fit: contain; }
   .box-item:hover{ background: rgba(238,243,248,1); transform: translateY(-3px); }
   .box-item:active{ transform: scale(.96); }
   .box-item.spotify{ background: rgba(111,216,199,0.22); }
   .box-item.spotify:hover{ background: rgba(111,216,199,0.34); }
 
-  /* ---------- Screen: soundtrack / top 5 songs ---------- */
   #screen-songs .mixtape{
     width: 100%;
     background: linear-gradient(160deg, #2a4160, #172c47);
@@ -326,8 +315,7 @@
     text-align:center;
     flex-shrink:0;
   }
-  /* tiny bouncing equalizer bars shown on the number slot of the
-     currently-playing track, instead of its index number */
+
   .eq-bars{
     display:flex; align-items:flex-end; justify-content:center;
     gap:2px; width:14px; height:14px; margin: 4px auto 0;
@@ -340,7 +328,6 @@
   .eq-bars span:nth-child(3){ animation-delay:.36s; }
   @keyframes eq{ 0%,100%{ height:3px; } 50%{ height:13px; } }
 
-  /* circular play/pause button, one per track */
   .song-playbtn{
     width:36px; height:36px; border-radius:50%; flex-shrink:0;
     border: 1.5px solid var(--gold);
@@ -352,7 +339,7 @@
   .song-playbtn:hover{ background: rgba(111,216,199,0.18); }
   .song-playbtn:active{ transform: scale(.92); }
   .song-playbtn svg{ width:13px; height:13px; fill: var(--gold-soft); }
-  .song-playbtn .icon-play{ margin-left:2px; } /* optical centering */
+  .song-playbtn .icon-play{ margin-left:2px; }
   .song-row.playing .song-playbtn{ background: var(--gold); border-color: var(--gold); }
   .song-row.playing .song-playbtn svg{ fill: var(--wine-deep); }
   .song-row.loading .song-playbtn{ opacity:.6; cursor:wait; }
@@ -372,7 +359,7 @@
     cursor:pointer; position:relative;
   }
   .song-progress-track::before{
-    /* fatter invisible hit-area so it's easy to tap/click precisely on mobile */
+
     content:''; position:absolute; top:-8px; bottom:-8px; left:0; right:0;
   }
   .song-progress-fill{
@@ -391,7 +378,7 @@
   .mixtape-header{
     display:flex; align-items:center; gap:10px; margin-bottom: 8px;
   }
-  .mixtape-header img{ width:30px; height:30px; object-fit:contain; }
+  .mixtape-header img{ width:39px; height:39px; object-fit:contain; }
   .mixtape-header span{
     font-family:'Fraunces', serif; color: var(--paper); font-size:1rem;
   }
@@ -405,7 +392,6 @@
   }
   .back-link:hover{ background: rgba(111,216,199,0.1); }
 
-  /* ---------- Screen: theatre reveal ---------- */
   #screen-theatre .theatre{
     width:100%;
     background: linear-gradient(180deg, #0a1220, #050a14);
@@ -438,9 +424,8 @@
     display:flex; justify-content:space-between;
     align-items:flex-end;
   }
-  .seats-row img{ width:46px; height:46px; object-fit:contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
+  .seats-row img{ width:60px; height:60px; object-fit:contain; filter: drop-shadow(0 6px 10px rgba(0,0,0,.5)); }
 
-  /* ---------- Screen: flower garden ---------- */
   #screen-garden .garden{
     width:100%;
     aspect-ratio: 4/5;
@@ -460,8 +445,8 @@
   #screen-garden .garden-hero{
     position:absolute;
     left:50%; top:10%;
-    width: 62%;
-    max-width: 220px;
+    width: 78%;
+    max-width: 280px;
     transform: translateX(-50%);
     object-fit:contain;
     filter: drop-shadow(0 18px 26px rgba(0,0,0,.55));
@@ -480,7 +465,6 @@
     transform: rotate(-2deg);
   }
 
-  /* ---------- Screen 5: letter ---------- */
   #screen-letter .letter{
     width:100%;
     background: var(--paper);
@@ -493,8 +477,8 @@
     position:relative;
   }
   #screen-letter .letter-seal{
-    position:absolute; top:-18px; left:-18px;
-    width:44px; height:44px;
+    position:absolute; top:-22px; left:-22px;
+    width:57px; height:57px;
     object-fit:contain;
     filter: drop-shadow(0 8px 14px rgba(0,0,0,.45));
   }
@@ -519,7 +503,7 @@
     font-size:.8rem; text-decoration:underline; cursor:pointer;
     display:inline-flex; align-items:center; gap:6px;
   }
-  .btn-ghost img{ width:20px; height:20px; object-fit:contain; vertical-align:middle; }
+  .btn-ghost img{ width:26px; height:26px; object-fit:contain; vertical-align:middle; }
 
   .progress{
     position:absolute;
@@ -541,11 +525,6 @@
 </head>
 <body>
 
-<!-- Looping night-sky background video.
-     Autoplay policies on phones require: muted + playsinline + loop.
-     If the video can't play (data-saver mode, slow connection, etc.)
-     the CSS gradient on .bg-video-wrap shows instead, so the page
-     never breaks. See the JS at the bottom for the loop safety-net. -->
 <div class="bg-video-wrap">
   <video
     class="bg-video"
@@ -558,8 +537,7 @@
     poster="assets/video/poster.jpg"
     disablePictureInPicture
     disableRemotePlayback>
-    <!-- phones get the lighter 720p file automatically; laptops/desktops get the 1080p one -->
-    <source src="assets/video/bg-loop-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
+        <source src="assets/video/bg-loop-mobile.mp4" type="video/mp4" media="(max-width: 768px)">
     <source src="assets/video/bg-loop.mp4" type="video/mp4">
   </video>
 </div>
@@ -567,8 +545,7 @@
 
 <div class="stage">
 
-  <!-- SCREEN 1 — secret code -->
-  <section class="screen active" id="screen-lock">
+    <section class="screen active" id="screen-lock">
     <div class="lockbox" style="position:relative;">
       <div class="ribbon-corner"></div>
       <img class="charm-icon" src="assets/icons/icon-chest.png" alt="">
@@ -584,8 +561,7 @@
     </div>
   </section>
 
-  <!-- SCREEN — the gift box hub (appears right after code confirms) -->
-  <section class="screen" id="screen-box">
+    <section class="screen" id="screen-box">
     <div class="eyebrow">for you</div>
     <div class="display" style="font-size:1.5rem; margin-bottom:22px;">Tap something<br>to open it.</div>
     <div class="box">
@@ -610,8 +586,7 @@
     </button>
   </section>
 
-  <!-- SCREEN 2 — do you wanna see -->
-  <section class="screen" id="screen-ask">
+    <section class="screen" id="screen-ask">
     <img class="critter" src="assets/icons/frieren-surprised.png" alt="">
     <div class="display">Do you wanna see<br>what I made for you?</div>
     <div class="choice-arena" id="choiceArena">
@@ -621,22 +596,20 @@
     <div class="dodge-hint" id="dodgeHint">&nbsp;</div>
   </section>
 
-  <!-- SCREEN — top 5 songs -->
-  <section class="screen" id="screen-songs">
+    <section class="screen" id="screen-songs">
     <div class="eyebrow">our soundtrack</div>
     <div class="mixtape">
       <div class="mixtape-header">
         <img src="assets/icons/trio-group.png" alt="">
         <span>a mixtape for the journey</span>
       </div>
-      <div class="song-list" id="songList"><!-- filled by JS from SONGS array --></div>
+      <div class="song-list" id="songList"></div>
     </div>
     <div class="display">five songs, five reasons<br>they remind me of you.</div>
     <button class="back-link" id="backFromSongs" style="margin-top:18px;">← back to the box</button>
   </section>
 
-  <!-- SCREEN — theatre / photo reveal with reaction -->
-  <section class="screen" id="screen-theatre">
+    <section class="screen" id="screen-theatre">
     <div class="theatre">
       <img class="screen-img" id="photoImg" src="assets/your-photo.jpg" alt="Replace with your own photo"
            onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22750%22><rect width=%22600%22 height=%22750%22 fill=%22%230e1a2c%22/><text x=%2250%25%22 y=%2248%25%22 fill=%22%236fd8c7%22 font-family=%22sans-serif%22 font-size=%2226%22 text-anchor=%22middle%22>put a photo here</text><text x=%2250%25%22 y=%2256%25%22 fill=%22%23bdf0e4%22 font-family=%22sans-serif%22 font-size=%2216%22 text-anchor=%22middle%22>assets/your-photo.jpg</text></svg>';">
@@ -649,8 +622,7 @@
     <button class="back-link" id="backFromTheatre" style="margin-top:18px;">← back to the box</button>
   </section>
 
-  <!-- SCREEN — flower garden -->
-  <section class="screen" id="screen-garden">
+    <section class="screen" id="screen-garden">
     <div class="garden">
       <img class="garden-hero" src="assets/icons/frieren-bouquet.png" alt="">
       <div class="garden-bubble">a bouquet wasn't enough for you,<br>so I brought the whole garden 🌻</div>
@@ -658,8 +630,7 @@
     <button class="back-link" id="backFromGarden" style="margin-top:18px;">← back to the box</button>
   </section>
 
-  <!-- SCREEN — letter (postcard style) -->
-  <section class="screen" id="screen-letter">
+    <section class="screen" id="screen-letter">
     <div class="eyebrow">a letter for the prettiest person in the whole wide world</div>
     <div class="letter">
       <img class="letter-seal" src="assets/icons/fern-pray.png" alt="">
@@ -679,13 +650,9 @@
 
 <script>
 (function(){
-  // ====== CUSTOMIZE ======
-  const SECRET_CODE = "393";   // change to whatever code you want
 
-  // Drop your mp3 files in assets/songs/ using these exact filenames
-  // (song1.mp3, song2.mp3, ...). Until a file exists, that track's
-  // row still works fine — tapping play just shows a small note
-  // that the file isn't there yet.
+  const SECRET_CODE = "393";
+
   const SONGS = [
     { title: "Paparazi",   artist: "Artist name forgot", src: "assets/songs/song1.mp3" },
     { title: "Song title two",   artist: "Artist name", src: "assets/songs/song2.mp3" },
@@ -693,7 +660,6 @@
     { title: "Song title four",  artist: "Artist name", src: "assets/songs/song4.mp3" },
     { title: "Song title five",  artist: "Artist name", src: "assets/songs/song5.mp3" }
   ];
-  // ========================
 
   const screens = ["screen-lock","screen-ask","screen-box","screen-songs","screen-theatre","screen-garden","screen-letter"];
   let entered = "";
@@ -750,7 +716,6 @@
     });
   }
 
-  // Build number keys 1-9
   (function initKeys(){
     keypad.innerHTML = "";
     for(let n=1;n<=9;n++){
@@ -791,7 +756,6 @@
     entered = entered.slice(0,-1); renderDots();
   });
 
-  // "no" button dodges the cursor/tap so "yes" is the only real option
   const noBtn = document.getElementById('noBtn');
   const choiceArena = document.getElementById('choiceArena');
   const dodgeHint = document.getElementById('dodgeHint');
@@ -819,12 +783,12 @@
   noBtn.addEventListener('click', (e)=>{ e.preventDefault(); dodgeNo(); });
   noBtn.addEventListener('touchstart', (e)=>{ e.preventDefault(); dodgeNo(); }, {passive:false});
 
-  document.getElementById('yesBtn').addEventListener('click', ()=> goTo(2));   // ask -> box hub
+  document.getElementById('yesBtn').addEventListener('click', ()=> goTo(2));
 
-  document.getElementById('hubSongs').addEventListener('click', ()=> goTo(3));    // box -> songs
-  document.getElementById('hubTheatre').addEventListener('click', ()=> goTo(4));  // box -> theatre
-  document.getElementById('hubGarden').addEventListener('click', ()=> goTo(5));   // box -> garden
-  document.getElementById('hubLetter').addEventListener('click', ()=> goTo(6));   // box -> letter
+  document.getElementById('hubSongs').addEventListener('click', ()=> goTo(3));
+  document.getElementById('hubTheatre').addEventListener('click', ()=> goTo(4));
+  document.getElementById('hubGarden').addEventListener('click', ()=> goTo(5));
+  document.getElementById('hubLetter').addEventListener('click', ()=> goTo(6));
 
   document.getElementById('backFromSongs').addEventListener('click', ()=> goTo(2));
   document.getElementById('backFromTheatre').addEventListener('click', ()=> goTo(2));
@@ -840,8 +804,7 @@
   });
 
   function goTo(index){
-    // leaving the songs screen (or restarting) pauses whatever's playing,
-    // so the mixtape never keeps singing along quietly in the background
+
     if (screens[index] !== 'screen-songs') stopSongPlayback();
     screens.forEach((id,i)=>{
       document.getElementById(id).classList.toggle('active', i===index);
@@ -850,11 +813,8 @@
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
-  // ====== mixtape audio player ======
-  // One shared <audio> element reused for every track — only one song
-  // plays at a time, which keeps this light and simple on mobile.
   const audio = new Audio();
-  audio.preload = 'metadata'; // fetch just enough to know the duration, not the whole file
+  audio.preload = 'metadata';
   let currentSongIndex = null;
 
   function fmtTime(sec){
@@ -901,13 +861,12 @@
     const row = getRow(i);
 
     if (currentSongIndex === i){
-      // same track already loaded — just resume
+
       audio.play().catch(()=> showMissing(row));
       setRowPlayingUI(row, true);
       return;
     }
 
-    // switching tracks: reset whichever row was playing before
     if (currentSongIndex !== null) resetRow(currentSongIndex);
 
     row.classList.add('loading');
@@ -936,13 +895,12 @@
     setRowPlayingUI(getRow(i), false);
   }
 
-  // clicking a row's play button toggles that track
   document.getElementById('songList').addEventListener('click', (e)=>{
     const track = e.target.closest('.song-progress-track');
     if (track){
       const row = track.closest('.song-row');
       const i = Number(row.dataset.index);
-      if (i !== currentSongIndex || !audio.duration) return; // can only seek the loaded track
+      if (i !== currentSongIndex || !audio.duration) return;
       const rect = track.getBoundingClientRect();
       const ratio = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
       audio.currentTime = ratio * audio.duration;
@@ -973,7 +931,6 @@
     if (row) row.querySelector('.song-time').textContent = fmtTime(audio.duration);
   });
 
-  // when one track finishes, glide into the next one on the mixtape
   audio.addEventListener('ended', ()=>{
     if (currentSongIndex === null) return;
     const finished = currentSongIndex;
@@ -991,14 +948,9 @@
   renderProgress(0);
   renderSongs();
 
-  // ====== background video: robust looping + performance guardrails ======
   const bgVideo = document.querySelector('.bg-video');
   if (bgVideo){
-    // Respect people who've explicitly asked for less motion or less
-    // data usage — skip the video entirely and keep just the CSS
-    // night-sky gradient behind the cards. This also quietly protects
-    // low-end phones, since Data Saver is commonly on for exactly
-    // those devices.
+
     const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const saveData = navigator.connection && navigator.connection.saveData;
     if (prefersReducedMotion || saveData){
@@ -1006,35 +958,21 @@
       bgVideo.removeAttribute('src');
       bgVideo.load();
     } else {
-      // Some mobile browsers (esp. iOS Safari in Low Power Mode, or with
-      // Data Saver on) block autoplay until a real user gesture happens,
-      // even when muted+playsinline are set. This retries play() on the
-      // first tap/click anywhere on the page, so the video always
-      // recovers instead of staying frozen on frame 1.
+
       const tryPlay = () => { bgVideo.play().catch(()=>{}); };
       tryPlay();
       document.addEventListener('click', tryPlay, { once:true });
       document.addEventListener('touchstart', tryPlay, { once:true, passive:true });
 
-      // Safety net in case a device ignores the native `loop` attribute
-      // (happens on a few older Android WebViews) — force it to restart
-      // seamlessly instead of just stopping on the last frame.
       bgVideo.addEventListener('ended', () => {
         bgVideo.currentTime = 0;
         tryPlay();
       });
 
-      // If the source is missing/unsupported, fail quietly and let the
-      // CSS night-sky gradient on .bg-video-wrap show instead — never
-      // leave a broken video icon or blank white box on screen.
       bgVideo.addEventListener('error', () => {
         bgVideo.style.display = 'none';
       });
 
-      // When the tab is hidden, pause to save battery/CPU; resume when
-      // it's visible again. This is a big part of what was causing the
-      // "laggy" feeling — a background video decoding away on a tab
-      // you've switched away from.
       document.addEventListener('visibilitychange', () => {
         if (document.hidden) bgVideo.pause();
         else tryPlay();
