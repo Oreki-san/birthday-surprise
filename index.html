@@ -9,10 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Caveat:wght@500;700&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 
-  :root{
-    --code-length: 3;
-  }
-
   * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 
   :root{
@@ -26,12 +22,15 @@
     --blush: #a99bd9;
   }
 
-  html,body{
-    height:100%;
+  html{
+    min-height:100%;
     background: var(--wine-deep);
+    overflow-x:hidden;
+    -webkit-text-size-adjust:100%;
+  }
+  body{
     font-family: 'Jost', sans-serif;
     color: var(--paper);
-    overflow-x:hidden;
   }
 
   .bg-video-wrap{
@@ -75,22 +74,29 @@
     background: transparent;
     min-height:100vh;
     min-height:100dvh;
+    height:auto;
     display:flex;
     align-items:center;
     justify-content:center;
-    padding: 24px;
+    padding:
+      max(24px, env(safe-area-inset-top))
+      max(24px, env(safe-area-inset-right))
+      max(24px, env(safe-area-inset-bottom))
+      max(24px, env(safe-area-inset-left));
   }
 
   .stage{
     width:100%;
     max-width: 460px;
-    min-height: 640px;
     position:relative;
+    margin: auto;
+    transition: max-width .35s ease;
   }
+  .stage.wide{ max-width: 680px; }
 
   .screen{
-    position:absolute;
-    inset:0;
+    position:relative;
+    width:100%;
     display:none;
     flex-direction:column;
     align-items:center;
@@ -466,7 +472,7 @@
     background: var(--paper);
     color: var(--ink);
     border-radius: 6px;
-    padding: 30px 26px;
+    padding: 40px 34px 32px;
     text-align:left;
     box-shadow: 0 30px 60px -18px rgba(0,0,0,.55);
     margin-bottom: 22px;
@@ -478,9 +484,17 @@
     object-fit:contain;
     filter: drop-shadow(0 8px 14px rgba(0,0,0,.45));
   }
-  .letter-head{ font-family:'Caveat', cursive; font-size:1.5rem; color: var(--wine); margin-bottom: 10px; }
-  .letter-body{ font-size: .95rem; line-height:1.7; font-weight:300; }
-  .letter-sign{ font-family:'Caveat', cursive; font-size: 1.3rem; margin-top: 14px; display:block; color: var(--wine); }
+  #screen-letter .eyebrow{
+    line-height:1.2;
+    margin-bottom: 34px;
+    padding: 0 8px;
+    text-shadow: 0 2px 8px rgba(0,0,0,.6);
+  }
+  .letter-head{ font-family:'Caveat', cursive; font-size:1.6rem; color: var(--wine); margin-bottom: 12px; }
+  .letter-body{ font-size: 1rem; line-height:1.75; font-weight:400; color:#2a3447; }
+  .letter-body p{ margin-bottom: 1.05em; }
+  .letter-body p:last-child{ margin-bottom: 0; }
+  .letter-sign{ font-family:'Caveat', cursive; font-size: 1.5rem; margin-top: 18px; display:block; color: var(--wine); }
 
   .btn-primary{
     padding: 13px 34px;
@@ -502,15 +516,44 @@
   .btn-ghost img{ width:26px; height:26px; object-fit:contain; vertical-align:middle; }
 
   .progress{
-    position:absolute;
-    bottom: -34px; left:50%; transform:translateX(-50%);
-    display:flex; gap:6px;
+    display:flex; gap:6px; justify-content:center;
+    margin-top: 28px;
   }
   .progress span{
     width:6px; height:6px; border-radius:50%;
     background: rgba(238,243,248,.25);
   }
   .progress span.on{ background: var(--gold); }
+
+  @media (min-width: 900px){
+    .letter-body{ font-size: 1.08rem; }
+    #screen-letter .eyebrow{ font-size: 1.7rem; }
+  }
+
+  @media (max-width: 480px){
+    body{
+      padding:
+        max(18px, env(safe-area-inset-top))
+        max(18px, env(safe-area-inset-right))
+        max(18px, env(safe-area-inset-bottom))
+        max(18px, env(safe-area-inset-left));
+    }
+    #screen-letter .eyebrow{ font-size: 1.3rem; margin-bottom: 30px; }
+    #screen-letter .letter{ padding: 36px 22px 26px; }
+    #screen-letter .letter-seal{ top:-20px; left:-12px; width:50px; height:50px; }
+    .letter-body{ font-size: .96rem; line-height:1.7; }
+    .letter-head{ font-size: 1.5rem; }
+    .letter-sign{ font-size: 1.35rem; }
+    .ribbon-corner{ top:-10px; left:-10px; }
+    .charm-icon{ right:-8px; }
+    #screen-lock h1{ font-size: 1.5rem; }
+    #screen-ask .display{ font-size: 1.65rem; }
+  }
+
+  @media (max-width: 360px){
+    .dot{ width:40px; height:48px; }
+    .bubble{ max-width: 160px; font-size: 1rem; }
+  }
 
   @media (prefers-reduced-motion: reduce){
     .screen, .critter{ animation:none !important; }
@@ -607,8 +650,8 @@
 
     <section class="screen" id="screen-theatre">
     <div class="theatre">
-      <img class="screen-img" id="photoImg" src="assets/your-photo.jpg" alt="Replace with your own photo"
-           onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22750%22><rect width=%22600%22 height=%22750%22 fill=%22%230e1a2c%22/><text x=%2250%25%22 y=%2248%25%22 fill=%22%236fd8c7%22 font-family=%22sans-serif%22 font-size=%2226%22 text-anchor=%22middle%22>put a photo here</text><text x=%2250%25%22 y=%2256%25%22 fill=%22%23bdf0e4%22 font-family=%22sans-serif%22 font-size=%2216%22 text-anchor=%22middle%22>assets/your-photo.jpg</text></svg>';">
+      <img class="screen-img" id="photoImg" src="assets/your-photo.jpg" alt="A photo for you"
+           onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22750%22><defs><linearGradient id=%22g%22 x1=%220%22 y1=%220%22 x2=%220%22 y2=%221%22><stop offset=%220%22 stop-color=%22%2316243a%22/><stop offset=%221%22 stop-color=%22%230e1a2c%22/></linearGradient></defs><rect width=%22600%22 height=%22750%22 fill=%22url(%23g)%22/></svg>';">
       <div class="bubble">Wait a second... is that<br>my favorite person on my screen? 🎉</div>
       <div class="seats-row">
         <img src="assets/icons/frieren-calm.png" alt="">
@@ -626,20 +669,35 @@
     <button class="back-link" id="backFromGarden" style="margin-top:18px;">← back to the box</button>
   </section>
 
-    <section class="screen" id="screen-letter">
+
+<section class="screen" id="screen-letter">
     <div class="eyebrow">a letter for the prettiest person in the whole wide world</div>
+
     <div class="letter">
       <img class="letter-seal" src="assets/icons/fern-pray.png" alt="">
+
       <div class="letter-head">Hey you,</div>
+
       <div class="letter-body">
-        This is the part where you write something only they would understand —
-        an inside joke, a memory, the reason today matters. Keep it short and real;
-        that's what makes it land.
+        <p>Happy Birthday, Michelle</p>
+
+        <p>Another year older, yet still the same person who probably won't listen when someone tells her to sleep on time. I hope this year brings you so much happiness, peace, good health, and countless little moments that make you smile without even realising it.</p>
+
+        <p>I hope life is gentle with you, even on the days when things get difficult. I hope you achieve the things you're quietly wishing for, meet people who understand you without you having to explain yourself too much, and always have a place where you can feel comfortable being yourself. (Hope u include me)</p>
+
+        <p>And honestly, I'm really glad I got to know you. Maybe I don't always say things the right way, and maybe we don't talk as much as I'd like sometimes, but I'm still grateful for the conversations, the games, the random little moments, and all the memories that came along with knowing you. They're simple things, perhaps, but that doesn't make them any less meaningful to me.</p>
+
+        <p>You don't always have to be strong or brush everything off with a joke.</p>
+
+        <p>Happy birthday once again to the muse who motivated me to become a better person every day. I'm genuinely wishing you a beautiful year ahead, and I hope that when you look back on it, you'll have plenty of reasons to smile.</p>
       </div>
-      <span class="letter-sign">— edit this in the code, with love</span>
+
+      <span class="letter-sign">— with love, always</span>
     </div>
+
     <button class="back-link" id="backFromLetter">← back to the box</button>
   </section>
+
 
   <div class="progress" id="progressDots"></div>
 </div>
@@ -706,7 +764,7 @@
             </div>
             <span class="song-time">${s.src ? '0:00' : '--:--'}</span>
           </div>
-          <div class="song-missing" hidden>couldn't find ${s.src ? s.src.split('/').pop() : 'this file'} yet</div>
+          <div class="song-missing" hidden>this one isn't playing right now</div>
         </div>`;
       list.appendChild(row);
     });
@@ -806,6 +864,7 @@
       document.getElementById(id).classList.toggle('active', i===index);
     });
     renderProgress(index);
+    document.querySelector('.stage').classList.toggle('wide', screens[index] === 'screen-letter');
     window.scrollTo({top:0, behavior:'smooth'});
   }
 
